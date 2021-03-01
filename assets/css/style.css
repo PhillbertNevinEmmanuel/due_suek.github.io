@@ -128,7 +128,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-menu a:hover, .nav-menu .active > a, .nav-menu li:hover > a {
-  color: #d9232d;
+  color: #7fe20d;
 }
 
 .nav-menu .drop-down ul {
@@ -211,7 +211,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Get Startet Button */
 .get-started-btn {
   margin-left: 25px;
-  background: #d9232d;
+  background: #7fe20d;
   color: #fff;
   border-radius: 4px;
   padding: 8px 30px 9px 30px;
@@ -222,7 +222,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .get-started-btn:hover {
-  background: #e1444d;
+  background: #c8ff00;
   color: #fff;
 }
 
