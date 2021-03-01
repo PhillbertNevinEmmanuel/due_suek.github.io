@@ -660,12 +660,14 @@ section {
   top: 7px;
   position: absolute;
   font-size: 20px;
-  color: #d9232d;
+  color: #c8ff00;
 }
 
 .about .content p:last-child {
   margin-bottom: 0;
 }
+
+/* main: #7fe20d hover: #c8ff00 */
 
 /*--------------------------------------------------------------
 # Clients
