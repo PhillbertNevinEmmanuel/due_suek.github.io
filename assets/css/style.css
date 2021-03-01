@@ -221,6 +221,8 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-block;
 }
 
+/* main: #7fe20d hover: #c8ff00 */
+
 .get-started-btn:hover {
   background: #c8ff00;
   color: #fff;
@@ -345,7 +347,7 @@ h1, h2, h3, h4, h5, h6 {
 --------------------------------------------------------------*/
 #hero {
   width: 100%;
-  height: 100vh;
+  height: 70vh;
   background-color: rgba(63, 73, 83, 0.8);
   overflow: hidden;
   position: relative;
@@ -468,7 +470,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #hero .carousel-indicators li.active {
   opacity: 1;
-  background: #d9232d;
+  background: #7fe20d;
 }
 
 #hero .btn-get-started {
@@ -484,11 +486,13 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
   -webkit-animation-delay: 0.8s;
   animation-delay: 0.8s;
-  background: #d9232d;
+  background: #7fe20d;
 }
 
+/* main: #7fe20d hover: #c8ff00 */
+
 #hero .btn-get-started:hover {
-  background: #df3740;
+  background: #c8ff00;
 }
 
 @media (max-width: 992px) {
