@@ -759,9 +759,11 @@ section {
   border-radius: 3px;
 }
 
+/* main: #7fe20d hover: #c8ff00 */
+
 .portfolio #portfolio-flters li:hover, .portfolio #portfolio-flters li.filter-active {
   color: #fff;
-  background: #d9232d;
+  background: #7fe20d;
 }
 
 .portfolio #portfolio-flters li:last-child {
