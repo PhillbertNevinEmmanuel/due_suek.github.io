@@ -318,7 +318,6 @@
                 },
                 createUser: function(){
                     $('createUserModalCenter').modal('hide');
-
                     axios.post('https://6036feb554350400177216da.mockapi.io/users', {
                         name: this.name,
                         username: this.username,
@@ -360,6 +359,7 @@
                     this.message = null;
                     this.editMode = false;
                     this.deleteMode = true;
+                    this.userIdDelete = user.id;
                     this.name = user.name;
                     this.username = user.username;
                     this.email = user.email;
