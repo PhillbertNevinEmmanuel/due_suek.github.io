@@ -62,89 +62,152 @@
 
         <!-- ======= Login Section ======= -->
         <section id="Login" class="Login">
-            <div id="app" class="container">
-                <div class="col-md-12">
-                    <h2>User Data</h2>                
-                    <table class="table table-striped">
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Address</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                        </tr>
-                        <tr v-for="user in users">
-                            <td>{{ user.id }}</td>
-                            <td>{{ user.name }}</td>
-                            <td>{{ user.username }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>{{ user.address }}</td>
-                            <td><button class="btn btn-md btn-warning" v-on:click="getEdit(user)">Edit</button></td>
-                            <td><button class="btn btn-danger" v-on:click="getDelete(user)">Delete</button></td></li>
-                        </tr>
-                    </table>
-                    <div class="container">
-                        <button class="btn btn-md btn-primary" v-on:click="resetForm()">Create new User</button>
+            <div id="app">
+                <!-- Modal for Creating User -->
+                <div class="modal fade" id="createUserModalCenter" tabindex="-1" role="dialog" aria-labelledby="createUserModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="createUserModalLongTitle">User Form</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">                                        
+                                        <label for="name">Full Name</label>
+                                        <input  v-model="name" type="text" class="form-control" id="name" placeholder="Input your full name here!" value="" required>
+                                    </div>                    
+                                    <div class="mb-3">
+                                        <label for="username">Username</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">@</span>
+                                            </div>
+                                            <input v-model="username" type="text" class="form-control" id="username" placeholder="Input your username here!" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email">Email <span class="text-muted">(Optional)</span></label>
+                                        <input v-model="email" type="email" class="form-control" id="email" placeholder="Input your email here! example: you@example.com" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address">Address</label>
+                                        <input v-model="address" type="text" class="form-control" id="address" placeholder="Input your address here!" required>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" v-on:click="createUser">Save</button>
+                            </div>
+                        </div>
                     </div>
-                    <br>
+                </div>
 
-                    <div v-if="message" class="alert alert-success" role="alert">
-                        {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                <!-- Modal for Updating User -->
+                <div class="modal fade" id="updateUserModalCenter" tabindex="-1" role="dialog" aria-labelledby="updateUserModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="updateUserModalLongTitle">User Form</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="name">Full Name</label>
+                                        <input  v-model="nameUpdate" type="text" class="form-control" id="name" placeholder="Input your full name here!" value="" required>                
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="username">Username</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">@</span>
+                                            </div>
+                                            <input v-model="usernameUpdate" type="text" class="form-control" id="usernameUpdate" placeholder="Input your username here!" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email">Email <span class="text-muted">(Optional)</span></label>
+                                        <input v-model="emailUpdate" type="email" class="form-control" id="emailUpdate" placeholder="Input you email here! example: you@example.com" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address">Address</label>
+                                        <input v-model="addressUpdate" type="text" class="form-control" id="addressUpdate" placeholder="Input your address here!" required>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" v-on:click="updateUser">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal for Deleting User -->
+                <div class="modal fade" id="deleteUserModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteUserModalLongTitle">Confirm data deletion</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h3>Are you sure want to delete this user?</h3>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" v-on:click="deleteUser">Yes</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+
+                <div class="container">
+                    <div class="col-md-12">
+                        <button type="button" class="mb-4 btn btn-primary" data-toggle="modal" data-target="#createUserModalCenter">
+                            Create User
                         </button>
-                    </div>
-                    <h4 class="mb-3">User Information</h4>
-                    <form class="needs-validation" novalidate>
-                        <div class="mb-3">
-                            <label for="name">Full Name</label>
-                            <input v-model="name" type="text" class="form-control" id="name" placeholder="Input your full name here!" value="" required>
-                            <div class="invalid-feedback">
-                                Valid Full name is required.
-                            </div>
-                        </div>
-              
-                        <div class="mb-3">
-                            <label for="username">Username</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">@</span>
-                                </div>
-                                <input v-model="username" type="text" class="form-control" id="username" placeholder="input your username here!" required>
-                                <div class="invalid-feedback" style="width: 100%;">
-                                    Your username is required.
-                                </div>
-                            </div>
-                        </div>
-              
-                        <div class="mb-3">
-                            <label for="email">Email <span class="text-muted">(Optional)</span></label>
-                            <input v-model="email" type="email" class="form-control" id="email" placeholder="input your email here! example: you@example.com">
-                            <div class="invalid-feedback">
-                                Please enter a valid email address for shipping updates.
-                            </div>
+        
+                        <div v-if="message" class="alert alert-success" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="address">Address</label>
-                            <div class="input-group">
-                                <input v-model="address" type="text" class="form-control" id="address" placeholder="input your address here!" required>
-                                <div class="invalid-feedback" style="width: 100%;">
-                                    Your username is required.
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <hr class="mb-3">
-                        <button v-if="!editMode && !deleteMode" v-on:click="createUser" class="btn btn-primary btn-lg btn-block" type="submit">Submit Data</button>
-                        <button v-if="editMode" v-on:click="updateUser" class="btn btn-warning btn-lg btn-block" type="submit">Update Data</button>
-                        <button v-if="deleteMode" v-on:click="deleteUser" class="btn btn-danger btn-lg btn-block" type="submit">Delete Data</button>  
-                    </form>
+                        <h3 class="mb-3 text-center">User Data</h3>
+                        <table class="table table-striped">
+                            <tr>
+                                <th>id</th>
+                                <th>Full Name</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <tr v-for="user in users">
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.name }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.address }}</td>
+                                <td><button class="btn btn-sm btn-warning" v-on:click="getEdit(user)">Edit</button></td>
+                                <td><button class="btn btn-sm btn-danger" v-on:click="getDelete(user)">Delete</button></td>
+                            </li>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </section><!-- End Login Section -->
+        </section --><!-- End Login Section -->
 
     </main><!-- End #main -->
 
@@ -225,7 +288,7 @@
             data: {
                 errors: [],
                 message: null,
-                users:[],
+                users: [],
                 userIdEdit: null,
                 userIdDelete: null,
                 editMode: false,
@@ -234,22 +297,28 @@
                 username: '',
                 email: '',
                 address: '',
+                nameUpdate: '',
+                usernameUpdate: '',
+                emailUpdate: '',
+                addressUpdate: '',
             },
             mounted: function() {
                 this.getUser();
             },
             methods: {
-                getUser() {
+                getUser(){
                     axios.get('https://6036feb554350400177216da.mockapi.io/users')
-                        .then(response => {
-                            this.users = response.data;
-                            console.log(response);
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
+                    .then(response =>{
+                        this.users = response.data;
+                        console.log(response);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
                 },
                 createUser: function(){
+                    $('createUserModalCenter').modal('hide');
+
                     axios.post('https://6036feb554350400177216da.mockapi.io/users', {
                         name: this.name,
                         username: this.username,
@@ -257,16 +326,16 @@
                         address: this.address,
                     })
                     .then(response => {
-                            this.getUser();
-                            this.message = "Your data has been submitted";
-                            console.log(response);
+                        this.getUser();
+                        this.message = "User created!";
+                        this.resetForm();
+                        console.log(response);
                     })
                     .catch(error => {
-                            console.log(error);
-                    });
+                        console.log(error);
+                    })
                 },
-                resetForm: function () {
-                    this.message = null;
+                resetForm: function(){
                     this.editMode = false;
                     this.deleteMode = false;
                     this.userIdEdit = null;
@@ -275,59 +344,59 @@
                     this.email = null;
                     this.address = null;
                 },
-                getEdit: function (user) {
+                getEdit: function(user){
+                    $('#updateUserModalCenter').modal('show');
                     this.message = null;
                     this.editMode = true;
                     this.deleteMode = false;
                     this.userIdEdit = user.id;
-                    this.name = user.name;
-                    this.username = user.username;
-                    this.email = user.email;
-                    this.address = user.address;
+                    this.nameUpdate = user.name;
+                    this.usernameUpdate = user.username;
+                    this.emailUpdate = user.email;
+                    this.addressUpdate = user.address;
                 },
-                getDelete: function (user) {
+                getDelete: function(user){
+                    $('#deleteUserModalCenter').modal('show')
                     this.message = null;
-                    this.deleteMode = true;
                     this.editMode = false;
-                    this.userIdDelete = user.id;
+                    this.deleteMode = true;
                     this.name = user.name;
                     this.username = user.username;
                     this.email = user.email;
                     this.address = user.address;
                 },
-                updateUser: function () {
+                updateUser: function(){
                     axios.put(`https://6036feb554350400177216da.mockapi.io/users/${this.userIdEdit}`, {
-                            name: this.name,
-                            username: this.username,
-                            email: this.email,
-                            address: this.address
-                        })
-                        .then(res => {
-                            // handle success
-                            this.message = "Your data has been updated";
-                            this.getUser();
-                        })
-                        .catch(err => {
-                            // handle error
-                            console.log(err);
-                        })
+                        name: this.nameUpdate,
+                        username: this.usernameUpdate,
+                        email: this.emailUpdate,
+                        address: this.addressUpdate,
+                    })
+                    .then(res => {
+                        this.message = "Your user data has been updated!";
+                        $('#updateUserModalCenter').modal('hide');
+                        this.resetForm();
+                        this.getUser();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
                 },
-                // Delete User
-                deleteUser: function () {
+                deleteUser: function(){
                     axios.delete(`https://6036feb554350400177216da.mockapi.io/users/${this.userIdDelete}`)
-                        .then(res => {
-                            // handle success
-                            this.message = "Your data has been deleted";
-                            this.getUser();
-                        })
-                        .catch(err => {
-                            // handle error
-                            console.log(err);
-                        })
+                    .then(res => {
+                        this.message = "Your user data has been deleted!";
+                        $('#deleteUserModalCenter').modal('hide');
+                        this.resetForm();
+                        this.getUser();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
                 }
             }
         })
-        
     </script>
+        
 </body>
 </html>
