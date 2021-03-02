@@ -15,6 +15,7 @@
   <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
   <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
   <link href="assets/css/style.css" rel="stylesheet">
   
   <!-- =======================================================
@@ -30,17 +31,17 @@
   <header id="header" class="fixed-top ">
     <div class="container d-flex align-items-center">
       <a href="index.html" class="logo"><img src="assets/img/apple-touch-icon.png" alt="" class="img-fluid"></a>
-    <nav class="nav-menu d-none d-lg-block">
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li class="active"><a href="catalogue.html">Catalogue</a></li>
-        <li><a href="testimonials.html">Testimonials</a></li>
-        <li><a href="cart.html">Shopping Cart</a></li>
-        <li><a href="contact.html">Contact Us</a></li>
-      </ul>      
-    </nav>
-    <a href="login.html" class="get-started-btn ml-auto">Login</a>
+      <nav class="nav-menu d-none d-lg-block">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li class="active"><a href="catalogue.html">Catalogue</a></li>
+          <li><a href="testimonials.html">Testimonials</a></li>
+          <li><a href="cart.html">Shopping Cart</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>      
+      </nav>
+      <a href="login.html" class="get-started-btn ml-auto">Login</a>
     </div>
   </header>
 
@@ -63,81 +64,22 @@
 
     <!-- ======= Pricing Section ======= -->
     <section id="pricing" class="pricing">
-      <div class="container">
-
+      <div class="container" id="app">
         <div class="row">
-
-          <div class="col-lg-3 col-md-6">
-            <div class="box">
-              <h3>Free</h3>
-              <h4><sup>$</sup>0<span> / month</span></h4>
-              <ul>
-                <li>Aida dere</li>
-                <li>Nec feugiat nisl</li>
-                <li>Nulla at volutpat dola</li>
-                <li class="na">Pharetra massa</li>
-                <li class="na">Massa ultricies mi</li>
-              </ul>
-              <div class="btn-wrap">
-                <a href="#" class="btn-buy">Buy Now</a>
+          <div v-for="product in products" class="col-md-3 col-6 my-1">
+            <div class="card h-100">
+              <img :src="product.img" class="card-img-top">
+              <div class="card-body">
+                <div class="card-title">{{ product.name }}</div>
+                  <div class="card-text">{{ product.color }}</div>
+                  <div class="card-text">{{ product.material }}</div>
+                <div>
+                  <a href="#" class="get-started-btn ml-auto">Rp. {{ product.price }}</a>
+                </div>
               </div>
             </div>
           </div>
-
-          <div class="col-lg-3 col-md-6 mt-4 mt-md-0">
-            <div class="box featured">
-              <h3>Business</h3>
-              <h4><sup>$</sup>19<span> / month</span></h4>
-              <ul>
-                <li>Aida dere</li>
-                <li>Nec feugiat nisl</li>
-                <li>Nulla at volutpat dola</li>
-                <li>Pharetra massa</li>
-                <li class="na">Massa ultricies mi</li>
-              </ul>
-              <div class="btn-wrap">
-                <a href="#" class="btn-buy">Buy Now</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 mt-4 mt-lg-0">
-            <div class="box">
-              <h3>Developer</h3>
-              <h4><sup>$</sup>29<span> / month</span></h4>
-              <ul>
-                <li>Aida dere</li>
-                <li>Nec feugiat nisl</li>
-                <li>Nulla at volutpat dola</li>
-                <li>Pharetra massa</li>
-                <li>Massa ultricies mi</li>
-              </ul>
-              <div class="btn-wrap">
-                <a href="#" class="btn-buy">Buy Now</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 mt-4 mt-lg-0">
-            <div class="box">
-              <span class="advanced">Advanced</span>
-              <h3>Ultimate</h3>
-              <h4><sup>$</sup>49<span> / month</span></h4>
-              <ul>
-                <li>Aida dere</li>
-                <li>Nec feugiat nisl</li>
-                <li>Nulla at volutpat dola</li>
-                <li>Pharetra massa</li>
-                <li>Massa ultricies mi</li>
-              </ul>
-              <div class="btn-wrap">
-                <a href="#" class="btn-buy">Buy Now</a>
-              </div>
-            </div>
-          </div>
-
         </div>
-
       </div>
     </section><!-- End Pricing Section -->
 
@@ -209,6 +151,34 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <!-- Axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <!-- VueJS Script -->
+  <script>
+    var app = new Vue ({
+      el: '#app',
+      data: {
+        products: '',
+      },
+      mounted: function(){
+        this.getProduct();
+      },
+      methods: {
+        getProduct(){
+          axios.get('https://6036feb554350400177216da.mockapi.io/products')
+            .then(response => {
+              this.products = response.data;
+              console.log(response);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+      }
+    })
+  </script>
 
 </body>
 
