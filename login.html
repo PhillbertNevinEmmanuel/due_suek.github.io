@@ -82,7 +82,7 @@
                             <td>{{ user.email }}</td>
                             <td>{{ user.address }}</td>
                             <td><button class="btn btn-md btn-warning" v-on:click="getEdit(user)">Edit</button></td>
-                            <td><button class="btn btn-danger" v-on:click="getDelete(user)">Delete</button></td>
+                            <td><button class="btn btn-danger" v-on:click="getDelete(user)">Delete</button></td></li>
                         </tr>
                     </table>
                     <div class="container">
@@ -102,7 +102,7 @@
                             <label for="name">Full Name</label>
                             <input v-model="name" type="text" class="form-control" id="name" placeholder="Input your full name here!" value="" required>
                             <div class="invalid-feedback">
-                                Valid last name is required.
+                                Valid Full name is required.
                             </div>
                         </div>
               
@@ -252,7 +252,7 @@
                 createUser: function(){
                     axios.post('https://6036feb554350400177216da.mockapi.io/users', {
                         name: this.name,
-                        userName: this.username,
+                        username: this.username,
                         email: this.email,
                         address: this.address,
                     })
