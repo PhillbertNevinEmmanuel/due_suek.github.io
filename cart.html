@@ -64,8 +64,77 @@
 
         <!-- ======= Shopping Cart Section ======= -->
         <section id="Cart" class="Cart">
-            <div id="app" class="container">
-                
+            <div id="app">
+                <div class="container">
+                    <div class="py-5 text-center">
+                        <h4>Custom Made by Request Order</h4>
+                    </div>
+                    <div class="col-md-12">
+                        <div v-if="message" class="alert alert-success" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <table class="table">
+                            <tr>
+                                <th>No.</th>
+                                <th>Product Type</th>
+                                <th>Color</th>
+                                <th>Material</th>
+                                <th>Description</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <tr v-for="cart in carts">
+                                <td>{{ cart.id }}</td>
+                                <td>{{ cart.product }}</td>
+                                <td>{{ cart.color }}</td>
+                                <td>{{ cart.material }}</td>
+                                <td>{{ cart.description }}</td>
+                                <td><button class="btn btn-md btn-warning" v-on:click="getEdit(cart)">Edit</button></td>
+                                <td><button class="btn btn-danger" v-on:click="getDelete(cart)">Delete</button></td>
+                            </tr>
+                        </table>
+                        <h4>Input your custom product details here</h4>
+                        <form class="needs-validation" novalidate>
+                            <button class="btn get-started-btn btn-lg" v-on:click="resetForm()">Create New Order</button>
+                            <div class="mb-3">
+                                <label for="product">Product</label>
+                                <input v-model="product" type="text" class="form-control" id="product" placeholder="Input product type here" required>
+                                <div class="invalid-feedback">
+                                    You need to input the product type.
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="color">Color</label>
+                                <input v-model="color" type="text" class="form-control" id="color" placeholder="Input color here" required>
+                                <div class="invalid-feedback">
+                                    You need to input the product color.
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="material">Material</label>
+                                <input v-model="material" type="text" class="form-control" id="material" placeholder="Input material used for product here" required>
+                                <div class="invalid-feedback">
+                                    You need to input the product material.
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description">Description</label>
+                                <input v-model="description" type="textbox" class="form-control" id="description" placeholder="Input extra description here">
+                                <div class="invalid-feedback">
+                                    Are you sure you don't need to add some description for extra details?
+                                </div>
+                            </div>
+                            <hr class="mb-4">
+                            <button v-if="!editMode && !deleteMode" v-on:click="createCart" class="btn btn-secondary btn-lg btn-block" type="submit">Submit Order</button>
+                            <button v-if="editMode" v-on:click="updateCart" class="btn btn-warning btn-lg btn-block" type="submit">Update Order</button>
+                            <button v-if="deleteMode" v-on:click="deleteCart" class="btn btn-danger btn-lg btn-block" type="submit">Delete Order</button>
+                        </form>
+
+                    </div>
+                </div>
             </div>
         </section><!-- End Shopping Cart Section -->
 
@@ -76,7 +145,6 @@
         <div class="footer-top">
             <div class="container">
                 <div class="row">
-
                     <div class="col-lg-3 col-md-6">
                         <div class="footer-info">
                         <h3>Due Suek</h3>
@@ -137,6 +205,113 @@
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
+
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- VueJS -->
+    <script>
+        var app = new Vue ({
+            el: '#app',
+            data: {
+                errors: [],
+                message: null,
+                carts: [],
+                cartIdEdit: null,
+                cartIdDelete: null,
+                product: '',
+                color: '',
+                material: '',
+                description: '',
+            },
+            mounted: function(){
+                this.getCart();
+            },
+            methods: {
+                getCart(){
+                    axios.get('https://6036feb554350400177216da.mockapi.io/carts')
+                        .then(response =>{
+                            this.carts = response.data;
+                            console.log(response);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                },
+                createCart: function(){
+                    axios.post('https://6036feb554350400177216da.mockapi.io/carts', { 
+                        product: this.product,
+                        color: this.color,
+                        material: this.material,
+                        description: this.description,
+                    })
+                    .then(response => {
+                        this.getCart();
+                        this.message = "Your custom order has been made";
+                        console.log(response);
+                    })
+                    .catch(error =>{
+                        console.log(error);
+                    });
+                },
+                resetForm: function(){
+                    this.message = null;
+                    this.editMode = false;
+                    this.deleteMode = false;
+                    this.cartIdEdit = null;
+                    this.product = null;
+                    this.color = null;
+                    this.material = null;
+                    this.description = null;
+                },
+                getEdit: function(cart){
+                    this.message = null;
+                    this.editMode = true;
+                    this.deleteMode = false;
+                    this.cartIdEdit = cart.id;
+                    this.product = cart.product;
+                    this.color = cart.color;
+                    this.material = cart.material;
+                    this.description = cart.description;
+                },
+                getDelete: function(cart){
+                    this.message = null;
+                    this.editMode = false;
+                    this.deleteMode = true;
+                    this.cartIdEdit = cart.id;
+                    this.product = cart.product;
+                    this.color = cart.color;
+                    this.material = cart.material;
+                    this.description = cart.description;
+                },
+                updateCart: function(){
+                    axios.put(`https://6036feb554350400177216da.mockapi.io/carts/${this.cartIdEdit}`, {
+                        product: this.product,
+                        color: this.color,
+                        material: this.material,
+                        description: this.description,
+                    })
+                    .then(res => {
+                        this.message = "Your Order has been updated";
+                        this.getCart();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                },
+                deleteUser: function(){
+                    axios.delete(`https://6036feb554350400177216da.mockapi.io/carts/${this.cartIdDelete}`)
+                        .then(res => {
+                            this.message = "Your Order has been deleted";
+                            this.getCart();
+                        })
+                        .catch(err =>{
+                            console.log(err);
+                        })
+                }
+            }
+        })
+    </script>
 
 </body>
 
